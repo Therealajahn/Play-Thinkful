@@ -7,10 +7,19 @@ app.use(morgan('common'));
 
 
 app.get('/apps', (req,res)=>{
-    const {search = "", sort} = req.query;
+    const { search = "", sort="" } = req.query;
+    let { genres = "" } = req.query;
+
+    
     if(sort){
         if(!['Rating','App'].includes(sort)) {
             return res.status(400).send("Sort must be either rating or app");
+        }
+    }
+
+    if(genres){
+        if(!['action', 'puzzle', 'strategy', 'casual', 'arcade', 'card'].includes(genres.toLowerCase())) {
+            return res.status(400).send("Sort must be by approved genres.");
         }
     }
     let results = 
@@ -36,9 +45,23 @@ app.get('/apps', (req,res)=>{
         })
     }
 
-    
-    
-    
+    if(genres){
+        const newArray = results
+        .filter(app => {
+            genres = req.query.genres.toLowerCase();
+            // pull genres and create array for each genre
+            const appGenres = app.Genres.toLowerCase().split(';');
+            console.log(appGenres);
+            if (appGenres.includes(genres)){
+                console.log(true)
+                return true
+            } else {
+                console.log(false)
+                return false
+            }
+        })
+        results = newArray;
+    }
     res.json(results);
 })
 
