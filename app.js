@@ -65,4 +65,4 @@ app.get('/apps', (req,res)=>{
     res.json(results);
 })
 
-app.listen(3000);
+module.exports = app;
