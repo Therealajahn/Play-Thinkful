@@ -19,6 +19,22 @@ describe("app", () => {
                 });
        
     })
+
+    // Testing to see if an example search term returns the appropriate app response
+    it('should return item containing search term', () => {
+        const mySearchTerm = 'SUBWAY';
+        return supertest(app)
+                .get('/apps')
+                .query({search: mySearchTerm})
+                .expect(200)
+                .expect('Content-Type', /json/)
+                .then(response => {
+                    expect(response.body).to.be.an('array');
+                    expect(response.body).to.have.lengthOf.at.least(1);
+                    const searchTerm = response.body[0].App;
+                    expect(searchTerm.toUpperCase()).to.include(mySearchTerm);
+                })
+    })
     
 it("should be 400 if sort is incorrect",() => {
         return supertest(app)
@@ -67,7 +83,7 @@ it("should sort ratings in ascending order", () => {
             let i = 0;
             let sorted = true;
             while(sorted && i < res.body.length - 1){
-                // console.log(res.body[i].Rating, res.body[i + 1].Rating);
+                console.log(res.body[i].Rating, res.body[i + 1].Rating);
                 sorted = sorted && res.body[i].Rating <= res.body[i + 1].Rating
                 i++
             }

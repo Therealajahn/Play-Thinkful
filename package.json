@@ -8,9 +8,6 @@
     "start": "node server",
     "dev": "nodemon server"
   },
-   
-
-    
   "author": "",
   "license": "ISC",
   "devDependencies": {
